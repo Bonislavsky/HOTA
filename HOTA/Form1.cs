@@ -4,8 +4,7 @@ namespace HOTA
 {
     public partial class Form1 : Form
     {
-        private string _path = @"D:\Programming\CSharp\yHiBep\Hota\HOTA\HOTA\";
-        private string _filePath = @"D:\Programming\CSharp\yHiBep\Hota\HOTA\HOTA\Logs.txt";
+        private string _filePathLoger = @"Logs.txt";
         private Label _currentNote = null;
         private Color _originalColor = Color.Black;
 
@@ -17,13 +16,13 @@ namespace HOTA
 
         private void InitializeColorTimer()
         {
-            colorTimer.Interval = 1000; // Интервал в миллисекундах (1 секунды)
+            colorTimer.Interval = 1000; 
             colorTimer.Tick += (sender, e) =>
             {
                 if (_currentNote != null)
                 {
-                    _currentNote.ForeColor = _originalColor; // Возврат цвета ноты
-                    colorTimer.Stop(); // Остановка таймера
+                    _currentNote.ForeColor = _originalColor; 
+                    colorTimer.Stop(); 
                 }
             };
         }
@@ -37,7 +36,7 @@ namespace HOTA
             richTextBox1.Enabled = false;
 
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox1.Image = Image.FromFile(@$"{_path}Images\key.jpg");
+            pictureBox1.Image = Image.FromFile(@$"Images\key.jpg");
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -105,7 +104,7 @@ namespace HOTA
 
         private void PlaySound(string soundFile)
         {
-            SoundPlayer simpleSound = new SoundPlayer(@$"{_path}{soundFile}");
+            SoundPlayer simpleSound = new SoundPlayer(soundFile);
             simpleSound.Play();
         }
 
@@ -113,29 +112,25 @@ namespace HOTA
         {
             if (_currentNote != null)
             {
-                _currentNote.ForeColor = _originalColor; // Возврат цвета предыдущей ноты
+                _currentNote.ForeColor = _originalColor;
             }
 
             _currentNote = note;
-            _originalColor = note.ForeColor; // Сохранение оригинального цвета
-            note.ForeColor = color; // Установка нового цвета
-            colorTimer.Start(); // Запуск таймера для возврата цвета
+            _originalColor = note.ForeColor;
+            note.ForeColor = color; 
+            colorTimer.Start(); 
         }
 
         private void WriteToFile(string message)
         {
-            // Проверяем, существует ли файл
-            if (!File.Exists(_filePath))
+            if (!File.Exists(_filePathLoger))
             {
-                // Если файл не существует, создаем его
-                using StreamWriter createFileWriter = File.CreateText(_filePath);
+                using StreamWriter createFileWriter = File.CreateText(_filePathLoger);
                 createFileWriter.Close();
             }
 
-            // Открываем файл для добавления сообщения
-            using StreamWriter writer = File.AppendText(_filePath);
+            using StreamWriter writer = File.AppendText(_filePathLoger);
 
-            // Записываем сообщение в файл
             writer.WriteLine($"{DateTime.UtcNow:G} -- {message}");
         }
     }
